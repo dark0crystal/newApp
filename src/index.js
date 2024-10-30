@@ -12,6 +12,8 @@ import Login from './pages/login';
 import VolunteerPost from './pages/volunteer-posts';
 import Register from './pages/register';
 import VolunteeringRegister from './pages/volunteering-register';
+import Footer from './components/Footer';
+import PostDetails from './components/PostDetails';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -29,8 +31,10 @@ root.render(
     <Route path='/register' element={<Register/>}/>
     <Route path='/volunteering-register' element={<VolunteeringRegister/>}/>
     <Route path='/volunteer-posts' element={<VolunteerPost/>}/>
+    <Route path="/volunteer-posts/:postId" element={<PostDetails />} />
     
   </Routes>
+  <Footer/>
 </BrowserRouter>
 );
 

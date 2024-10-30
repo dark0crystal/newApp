@@ -19,20 +19,39 @@ export default function RegisterForm() {
       formData.password.trim() !== '';
 
     if (isFormValid) {
-      console.log('Form submitted successfully!');
-      // Reset the form
-      setFormData({
-        firstName: '',
-        familyName: '',
-        email: '',
-        password: ''
-      });
-      setFormErrors({
-        firstName: '',
-        familyName: '',
-        email: '',
-        password: ''
-      });
+      try {
+        // Replace with your actual backend URL
+        const response = await fetch('https://your-backend-url.com/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('User registered successfully:', result);
+          // Reset the form
+          setFormData({
+            firstName: '',
+            familyName: '',
+            email: '',
+            password: ''
+          });
+          setFormErrors({
+            firstName: '',
+            familyName: '',
+            email: '',
+            password: ''
+          });
+        } else {
+          console.error('Registration failed:', result.message);
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
     } else {
       console.log('Form contains validation errors or empty fields.');
     }
@@ -88,10 +107,10 @@ export default function RegisterForm() {
         <div className="card-body">
           <h3 className="card-title text-center mb-4">Register</h3>
           <form onSubmit={handleSubmit}>
+            {/* Form fields */}
+            {/* First Name Input */}
             <div className="mb-3">
-              <label htmlFor="firstName" className="form-label">
-                Enter your first name
-              </label>
+              <label htmlFor="firstName" className="form-label">Enter your first name</label>
               <input
                 type="text"
                 id="firstName"
@@ -102,14 +121,11 @@ export default function RegisterForm() {
                 onChange={handleInputChange}
               />
               <small className="text-danger">{formErrors.firstName}</small>
-              <small className="form-text text-muted">
-                First name should contain at least 3 characters.
-              </small>
             </div>
+
+            {/* Family Name Input */}
             <div className="mb-3">
-              <label htmlFor="familyName" className="form-label">
-                Enter your family name
-              </label>
+              <label htmlFor="familyName" className="form-label">Enter your family name</label>
               <input
                 type="text"
                 id="familyName"
@@ -120,14 +136,11 @@ export default function RegisterForm() {
                 onChange={handleInputChange}
               />
               <small className="text-danger">{formErrors.familyName}</small>
-              <small className="form-text text-muted">
-                Family name should contain at least 3 characters.
-              </small>
             </div>
+
+            {/* Email Input */}
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Enter your email
-              </label>
+              <label htmlFor="email" className="form-label">Enter your email</label>
               <input
                 type="email"
                 id="email"
@@ -140,10 +153,9 @@ export default function RegisterForm() {
               <small className="text-danger">{formErrors.email}</small>
             </div>
 
+            {/* Password Input */}
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+              <label htmlFor="password" className="form-label">Password</label>
               <input
                 type="password"
                 id="password"
@@ -156,6 +168,7 @@ export default function RegisterForm() {
               <small className="text-danger">{formErrors.password}</small>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               className={`btn btn-primary w-100 ${isLoading ? 'disabled' : ''}`}
@@ -165,11 +178,12 @@ export default function RegisterForm() {
             </button>
           </form>
 
+          {/* Navigation Link */}
           <div className="mt-4 text-center">
             <p>
-              Don't have an account?{' '}
-              <NavLink to="/about" className="text-decoration-none">
-                Register
+              Already have an account?{' '}
+              <NavLink to="/login" className="text-decoration-none">
+                Login
               </NavLink>
             </p>
           </div>

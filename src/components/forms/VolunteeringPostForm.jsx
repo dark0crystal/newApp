@@ -7,7 +7,7 @@ const initialFormState = {
   startDate: '',
   endDate: '',
   numOfDays: '',
-  coverImage: null, // Initialize as null for file input
+  // coverImage: null, // Uncomment to use file input
 };
 
 const VolunteeringPostForm = () => {
@@ -25,9 +25,9 @@ const VolunteeringPostForm = () => {
       [name]: fieldValue,
     }));
 
-    // Validate the input
     let errors = { ...formErrors };
 
+    // Validation rules for fields
     if (name === 'numOfDays' && (!Number.isInteger(+fieldValue) || +fieldValue <= 0)) {
       errors.numOfDays = 'Number of days must be a positive integer.';
     } else if (name === 'orgName' && fieldValue.length < 3) {
@@ -41,7 +41,7 @@ const VolunteeringPostForm = () => {
     } else if (name === 'endDate' && !Date.parse(fieldValue)) {
       errors.endDate = 'Please enter a valid end date.';
     } else {
-      errors[name] = ''; // Clear the error if the field is valid
+      errors[name] = ''; // Clear error if field is valid
     }
 
     setFormErrors(errors);
@@ -52,17 +52,17 @@ const VolunteeringPostForm = () => {
     setIsLoading(true);
 
     // Final validation check
-    const isFormValid = Object.values(formErrors).every((error) => error === '') &&
+    const isFormValid =
+      Object.values(formErrors).every((error) => error === '') &&
       Object.values(formData).every((field) => {
         if (typeof field === 'string') {
-          return field.trim() !== ''; // Only trim if it's a string
+          return field.trim() !== '';
         }
-        return field !== null && field !== undefined; // Check other types as well
+        return field !== null && field !== undefined;
       });
 
     if (isFormValid) {
       console.log('Form submitted successfully!');
-      // Add the submitted form data to the list
       setSubmittedEvents((prevEvents) => [...prevEvents, formData]);
 
       // Reset the form
@@ -78,6 +78,7 @@ const VolunteeringPostForm = () => {
     <div className="container mt-5">
       <h2 className="mb-4">Event Form</h2>
       <form onSubmit={handleSubmit} className="bg-light p-4 border rounded">
+        {/* Title Field */}
         <div className="mb-3">
           <label htmlFor="title" className="form-label">Title:</label>
           <input
@@ -89,6 +90,8 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.title && <div className="invalid-feedback">{formErrors.title}</div>}
         </div>
+
+        {/* Organization Name Field */}
         <div className="mb-3">
           <label htmlFor="orgName" className="form-label">Organization Name:</label>
           <input
@@ -100,6 +103,8 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.orgName && <div className="invalid-feedback">{formErrors.orgName}</div>}
         </div>
+
+        {/* Category Field */}
         <div className="mb-3">
           <label htmlFor="category" className="form-label">Category:</label>
           <input
@@ -111,6 +116,8 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.category && <div className="invalid-feedback">{formErrors.category}</div>}
         </div>
+
+        {/* Start Date Field */}
         <div className="mb-3">
           <label htmlFor="startDate" className="form-label">Start Date:</label>
           <input
@@ -122,6 +129,8 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.startDate && <div className="invalid-feedback">{formErrors.startDate}</div>}
         </div>
+
+        {/* End Date Field */}
         <div className="mb-3">
           <label htmlFor="endDate" className="form-label">End Date:</label>
           <input
@@ -133,6 +142,8 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.endDate && <div className="invalid-feedback">{formErrors.endDate}</div>}
         </div>
+
+        {/* Number of Days Field */}
         <div className="mb-3">
           <label htmlFor="numOfDays" className="form-label">Number of Days:</label>
           <input
@@ -144,7 +155,10 @@ const VolunteeringPostForm = () => {
           />
           {formErrors.numOfDays && <div className="invalid-feedback">{formErrors.numOfDays}</div>}
         </div>
-        <div className="mb-3">
+
+        {/* Cover Image Field */}
+        {/* Uncomment below to use the file input for cover image */}
+        {/* <div className="mb-3">
           <label htmlFor="coverImage" className="form-label">Cover Image:</label>
           <input
             type="file"
@@ -153,20 +167,23 @@ const VolunteeringPostForm = () => {
             onChange={handleInputChange}
           />
           {formErrors.coverImage && <div className="invalid-feedback">{formErrors.coverImage}</div>}
-        </div>
+        </div> */}
+
+        {/* Submit Button */}
         <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading ? 'Submitting...' : 'Submit'}
         </button>
       </form>
+
+      {/* Display submitted events */}
       {submittedEvents.length > 0 && (
         <div className="mt-4">
           <h2>Submitted Events</h2>
           <ul className="list-group">
             {submittedEvents.map((event, index) => (
-                <>
-              <li key={index} className="list-group-item">{event.title} - {event.orgName}</li>
-              <li>{event.coverImage}</li>
-              </>
+              <li key={index} className="list-group-item">
+                {event.title} - {event.orgName}
+              </li>
             ))}
           </ul>
         </div>

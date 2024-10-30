@@ -1,37 +1,48 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function LoginForm() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [formErrors, setFormErrors] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formErrors, setFormErrors] = useState({ email: "", password: "" });
   const [isLoading, setIsLoding] = useState(false);
-  const [submittedUsers, setSubmittedUsers] = useState([]); // New state to store submitted users
+  const [submittedUsers, setSubmittedUsers] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoding(true);
 
     // Final validation check
-    const isFormValid = Object.values(formErrors).every((error) => error === '') &&
-      formData.email.trim() !== '' && formData.password.trim() !== '';
+    const isFormValid =
+      Object.values(formErrors).every((error) => error === "") &&
+      formData.email.trim() !== "" &&
+      formData.password.trim() !== "";
 
     if (isFormValid) {
-      console.log('Form submitted successfully!');
-      // Add the submitted form data to the list
-      setSubmittedUsers((prevUsers) => [...prevUsers, formData]);
+      try {
+        // Make a POST request to the backend API to check credentials
+        const response = await fetch("http://localhost:5000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-      // Reset the form
-      setFormData({
-        email: '',
-        password: '',
-      });
-      setFormErrors({
-        email: '',
-        password: '',
-      });
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log("Login successful!");
+          // Add the submitted form data to the list
+          setSubmittedUsers((prevUsers) => [...prevUsers, formData]);
+        } else {
+          console.log("Login failed:", data.message);
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
     } else {
-      console.log('Form contains validation errors or empty fields.');
+      console.log("Form contains validation errors or empty fields.");
     }
     setIsLoding(false);
   };
@@ -44,27 +55,28 @@ export default function LoginForm() {
     }));
 
     // Validate the input
-    if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setFormErrors((prevState) => ({
         ...prevState,
-        email: 'Please enter a valid email address.',
+        email: "Please enter a valid email address.",
       }));
-    } else if (name === 'password' && value.length < 8) {
+    } else if (name === "password" && value.length < 8) {
       setFormErrors((prevState) => ({
         ...prevState,
-        password: 'Please enter a valid password with at least 8 characters.',
+        password: "Please enter a valid password with at least 8 characters.",
       }));
     } else {
       setFormErrors((prevState) => ({
         ...prevState,
-        [name]: '', // Reset error message
+        [name]: "", // Reset error message
       }));
     }
   };
 
-  // Check if the form has errors or empty fields to disable the submit button
-  const isFormDisabled = Object.values(formErrors).some((error) => error !== '') ||
-    formData.email.trim() === '' || formData.password.trim() === '';
+  const isFormDisabled =
+    Object.values(formErrors).some((error) => error !== "") ||
+    formData.email.trim() === "" ||
+    formData.password.trim() === "";
 
   return (
     <div className="container h-100 d-flex justify-content-center align-items-center">
@@ -106,16 +118,16 @@ export default function LoginForm() {
 
             <button
               type="submit"
-              className={`btn btn-primary w-100 ${isLoading ? 'disabled' : ''}`}
+              className={`btn btn-primary w-100 ${isLoading ? "disabled" : ""}`}
               disabled={isFormDisabled || isLoading}
             >
-              {isLoading ? 'Submitting...' : 'Submit'}
+              {isLoading ? "Submitting..." : "Submit"}
             </button>
           </form>
 
           <div className="mt-4 text-center">
             <p>
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <NavLink to="/register" className="text-decoration-none">
                 Register
               </NavLink>

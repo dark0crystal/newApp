@@ -1,19 +1,22 @@
+// NavLinks.js
+import { NavLink } from "react-router-dom";
+import "./NavLinks.css"; // Ensure this file is created with the styles
 
-import { NavLink } from "react-router-dom"
-export default function NavLinks(){
-    const navlinks = [
-        {destination:"/about" ,name:"about"},
-        {destination:"/ayhagah" ,name: "ayhagah"},
-        {destination:"/login" ,name: "Login"}
-        
-    ]
-    return(
-        <div  >
-            {
-                navlinks.map((link)=>(
-                    <NavLink className="mx-3 text-dark  " to={link.destination}>{link.name}</NavLink>
-                ))
-            }
-        </div>
-    )
+export default function NavLinks() {
+  const navlinks = [
+    { destination: "/about", name: "About" },
+    { destination: "/volunteer-posts", name: "Posts" },
+    { destination: "/login", name: "Login" },
+    { destination: "/volunteering-register", name: "Want Voluteers?" ,styling:"bg-success rounded-pill p-3 " },
+  ];
+
+  return (
+    <div>
+      {navlinks.map((link) => (
+        <NavLink key={link.name} className={`mx-3 custom-link ${link.styling}`} to={link.destination}>
+          {link.name}
+        </NavLink>
+      ))}
+    </div>
+  );
 }

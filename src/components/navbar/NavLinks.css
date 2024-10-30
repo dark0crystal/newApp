@@ -1,0 +1,10 @@
+/* NavLinks.css */
+.custom-link {
+    text-decoration: none;
+    color: inherit; /* Keeps the link's color as it was without affecting other styles */
+  }
+  
+  .custom-link:hover {
+    text-decoration: none; /* Ensure the link doesn't get underlined on hover */
+  }
+  
